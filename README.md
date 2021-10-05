@@ -54,4 +54,7 @@ docker build -f ./docker/connect-operator.Dockerfile -t crkkabanovwesteurope.azu
 az login
 az acr login --name crkkabanovwesteurope
 docker push crkkabanovwesteurope.azurecr.io/connect-operator:latest
+
+# Check that container has been pushed successfully:
+az acr repository show-tags --name crkkabanovwesteurope --repository connect-operator --output table
 ```
