@@ -65,6 +65,14 @@ resource "azurerm_storage_container" "data_container" {
   }
 }
 
+resource "azurerm_container_registry" "bdcc" {
+  name                = "cr${var.ENV}${var.LOCATION}"
+  resource_group_name = azurerm_resource_group.bdcc.name
+  location            = azurerm_resource_group.bdcc.location
+  sku                 = "Basic"
+  admin_enabled       = false
+
+}
 
 resource "azurerm_kubernetes_cluster" "bdcc" {
   depends_on = [
@@ -90,6 +98,18 @@ resource "azurerm_kubernetes_cluster" "bdcc" {
     region = var.BDCC_REGION
     env    = var.ENV
   }
+}
+
+resource "azurerm_role_assignment" "role_acrpull" {
+  depends_on = [
+    azurerm_container_registry.bdcc,
+    azurerm_kubernetes_cluster.bdcc
+  ]
+
+  scope                            = azurerm_container_registry.bdcc.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = azurerm_kubernetes_cluster.bdcc.kubelet_identity.0.object_id
+  skip_service_principal_aad_check = true
 }
 
 output "client_certificate" {
