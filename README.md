@@ -1,8 +1,10 @@
 # Spark Basic Homework
 
 ## 0. Prerequisites
+- Docker
 - Terraform
 - Azure account
+- Azure CLI
 
 ## 1. Setup infrastructure via Terraform:
 ```
@@ -40,4 +42,16 @@ sudo apt-get install apt-transport-https --yes
 echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update
 sudo apt-get install helm
+```
+
+## 3. Build the connector image and push it into ACR:
+* Build:
+```
+docker build -f ./docker/connect-operator.Dockerfile -t crkkabanovwesteurope.azurecr.io/connect-operator .
+```
+* Push:
+```
+az login
+az acr login --name crkkabanovwesteurope
+docker push crkkabanovwesteurope.azurecr.io/connect-operator:latest
 ```
