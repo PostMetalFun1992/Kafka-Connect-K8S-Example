@@ -81,3 +81,11 @@ kubectl get pods -o wide
 # Check that you have access to the control center:
 kubectl port-forward --address 0.0.0.0 controlcenter-0 9021:9021
 ```
+
+## 5. Try to interact with Kafka Connect REST API:
+```
+kubectl port-forward connect-0 8083:8083
+
+curl -X GET http://localhost:8083/
+curl -X GET http://localhost:8083/connectors/
+```
