@@ -58,3 +58,26 @@ docker push crkkabanovwesteurope.azurecr.io/connect-operator:latest
 # Check that container has been pushed successfully:
 az acr repository show-tags --name crkkabanovwesteurope --repository connect-operator --output table
 ```
+
+## 4. Launch Confluent Platform inside AKS:
+* Set the namespace to use:
+```
+kubectl create namespace confluent
+kubectl config set-context --current --namespace confluent
+```
+* Install Confluent operator:
+```
+helm repo add confluentinc https://packages.confluent.io/helm
+helm repo update
+helm upgrade --install confluent-operator confluentinc/confluent-for-kubernetes
+```
+* Install Confluent Platform:
+```
+kubectl apply -f ./k8s/confluent-platform.yaml
+
+# Make sure that all the pods are running:
+kubectl get pods -o wide
+
+# Check that you have access to the control center:
+kubectl port-forward --address 0.0.0.0 controlcenter-0 9021:9021
+```
