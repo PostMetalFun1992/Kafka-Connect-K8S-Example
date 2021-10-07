@@ -74,15 +74,34 @@ helm upgrade --install confluent-operator confluentinc/confluent-for-kubernetes
 * Install Confluent Platform:
 ```
 kubectl apply -f ./k8s/confluent-platform.yaml
-
-# Make sure that all the pods are running:
-kubectl get pods -o wide
-
-# Check that you have access to the control center:
-kubectl port-forward --address 0.0.0.0 controlcenter-0 9021:9021
 ```
 
-## 5. Try to interact with Kafka Connect REST API:
+## 5. Be sure that everything works fine:
+* Check that all pods are running:
+```
+kubectl get pods -o wide
+
+# Sample output:
+NAME                                 READY   STATUS    RESTARTS   AGE
+confluent-operator-99f7f8dcb-8wsws   1/1     Running   0          44h
+connect-0                            1/1     Running   2          18h
+controlcenter-0                      1/1     Running   0          18h
+kafka-0                              1/1     Running   0          18h
+kafka-1                              1/1     Running   0          18h
+kafka-2                              1/1     Running   0          18h
+ksqldb-0                             1/1     Running   0          18h
+schemaregistry-0                     1/1     Running   0          18h
+zookeeper-0                          1/1     Running   0          18h
+zookeeper-1                          1/1     Running   0          18h
+zookeeper-2                          1/1     Running   0          18h
+```
+* Check that you have access to the control center:
+```
+kubectl port-forward --address 0.0.0.0 controlcenter-0 9021:9021
+# Go to localhost:9021
+```
+
+* Try to interact with Kafka Connect REST API:
 ```
 kubectl port-forward connect-0 8083:8083
 
