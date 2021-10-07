@@ -107,4 +107,21 @@ kubectl port-forward connect-0 8083:8083
 
 curl -X GET http://localhost:8083/
 curl -X GET http://localhost:8083/connectors/
+
+# Be sure that your Kafka Connect has Azure connectors:
+curl -s -X GET http://localhost:8083/connector-plugins/ | jq '.'
+
+[
+  {
+      "class": "io.confluent.connect.azure.blob.AzureBlobStorageSinkConnector",
+      "type": "sink",
+      "version": "1.6.2"
+  },
+  {
+      "class": "io.confluent.connect.azure.blob.storage.AzureBlobStorageSourceConnector",
+      "type": "source",
+      "version": "1.4.5"
+  },
+  ...
+]
 ```
