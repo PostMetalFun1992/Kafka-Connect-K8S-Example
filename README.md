@@ -1,4 +1,4 @@
-# Spark Basic Homework
+# Kafka Connect Homework
 
 ## 0. Prerequisites
 - Docker
