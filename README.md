@@ -166,3 +166,13 @@ curl -X GET http://localhost:8083/connectors/expedia/status/ | jq "."
   "type": "source"
 }
 ```
+
+## 8. Use KSQLDB to print topic's contents:
+```
+kubectl exec -ti ksqldb-0 -- ksql
+
+ksql> PRINT expedia FROM BEGINNING LIMIT 1;
+Key format: ¯\_(ツ)_/¯ - no data processed
+Value format: JSON or KAFKA_STRING
+rowtime: 2021/10/07 15:55:20.768 Z, key: <null>, value: {"id":4,"date_time":"0000-00-00 00:00:00","site_name":2,"posa_container":null,"user_location_country":66,"user_location_region":467,"user_location_city":36345,"orig_destination_distance":66.7913,"user_id":50,"is_mobile":0,"is_package":0,"channel":0,"srch_ci":"2017-08-22","srch_co":"2017-08-23","srch_adults_cnt":2,"srch_children_cnt":0,"srch_rm_cnt":1,"srch_destination_id":11812,"srch_destination_type_id":1,"hotel_id":970662608899}
+```
