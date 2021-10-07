@@ -106,7 +106,6 @@ kubectl port-forward --address 0.0.0.0 controlcenter-0 9021:9021
 kubectl port-forward connect-0 8083:8083
 
 curl -X GET http://localhost:8083/
-curl -X GET http://localhost:8083/connectors/
 
 # Be sure that your Kafka Connect has Azure connectors:
 curl -s -X GET http://localhost:8083/connector-plugins/ | jq '.'
@@ -124,4 +123,46 @@ curl -s -X GET http://localhost:8083/connector-plugins/ | jq '.'
   },
   ...
 ]
+```
+
+## 6. Create topic:
+```
+kubectl exec -ti kafka-0 -- bash
+# Then inside the pod:
+kafka-topics --create --topic expedia --bootstrap-server localhost:9092 --partitions 3 --replication-factor 3
+```
+
+## 7. Launch the connector:
+```
+curl -s -X POST -H 'Content-Type: application/json' --data @connectors/azure-source-cc-expedia.json http://localhost:8083/connectors/
+
+# Check that connector has started:
+curl -X GET http://localhost:8083/connectors/expedia/status/ | jq "."
+
+{
+  "name": "expedia",
+  "connector": {
+  "state": "RUNNING",
+  "worker_id": "connect-0.connect.confluent.svc.cluster.local:8083"
+  },
+  "tasks": [
+  {
+    "id": 0,
+    "state": "RUNNING",
+    "worker_id": "connect-0.connect.confluent.svc.cluster.local:8083"
+  },
+  {
+    "id": 1,
+    "state": "RUNNING",
+    "worker_id": "connect-0.connect.confluent.svc.cluster.local:8083"
+  },
+  {
+    "id": 2,
+    "state": "RUNNING",
+    "worker_id": "connect-0.connect.confluent.svc.cluster.local:8083"
+  }
+    
+  ],
+  "type": "source"
+}
 ```
